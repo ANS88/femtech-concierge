@@ -71,9 +71,15 @@ TOOLS = [
 ]
 
 # ----------------- CONFIGURACIÓN DE LA PÁGINA -----------------
-st.set_page_config(page_title="Concierge Femtech (ES)", page_icon="✨")
-st.title("✨ Concierge Femtech — versión en español")
-st.caption("Prototipo de agente femtech — información general, no es consejo médico. Creado por Adriana Sainz, Ph.D.")
+st.set_page_config(page_title="Concierge Femtech (ES)", page_icon="🌺")
+st.title("🌺 Ixchel — tu aliada navegando la menopausia")
+st.markdown(
+    """
+    Soy un agente de **inteligencia artificial** diseñado para responder tus dudas acerca de la **menopausia** y la **perimenopausia**.  
+    Fui creada por una humana, [**Adriana Sainz, Ph.D.**](https://adnavarro.com) 💫
+    """,
+    unsafe_allow_html=True,
+)
 
 # ----------------- ESTADO DE SESIÓN -----------------
 if "messages_es" not in st.session_state:
