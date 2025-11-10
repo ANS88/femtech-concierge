@@ -116,13 +116,13 @@ def run_model_es(user_input: str) -> str:
                     "content": json.dumps(apps, ensure_ascii=False)
                 })
 
-        # Segunda llamada: el modelo recibe la salida de la herramienta
-       response = openai.chat.completions.create(
-    model="gpt-4.1-mini",
-    messages=messages,
-    tools=TOOLS,
-    tool_choice="auto",
-)
+    # Segunda llamada: el modelo recibe la salida de la herramienta
+        response = openai.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=messages,
+        tools=TOOLS,
+        tool_choice="auto",
+    )
         final_msg = followup.choices[0].message
         return final_msg.content
 
