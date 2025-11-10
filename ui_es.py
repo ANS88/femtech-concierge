@@ -88,13 +88,13 @@ def run_model_es(user_input: str) -> str:
     """Envía la conversación al modelo, maneja herramientas y devuelve respuesta en español."""
     messages = st.session_state.messages_es + [{"role": "user", "content": user_input}]
 
-    # Primera llamada: el modelo decide si quiere llamar a herramientas
-  response = openai.chat.completions.create(
-    model="gpt-4.1-mini",
-    messages=messages,
-    tools=TOOLS,
-    tool_choice="auto",
-)
+    # Primera llamada: el modelo decide si quiere llamar a herramientas            
+    response = openai.chat.completions.create(
+       model="gpt-4.1-mini",
+       messages=messages,
+       tools=TOOLS,
+       tool_choice="auto",
+    )
 
     msg = response.choices[0].message
 
