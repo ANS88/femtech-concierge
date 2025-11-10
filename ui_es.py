@@ -159,8 +159,6 @@ if user_input:
                 st.error(str(e))
 
             st.markdown(reply)
-
-Remove dotenv import for Streamlit Cloud
     # Guardar respuesta del asistente
     st.session_state.chat_display_es.append({"role": "assistant", "content": reply})
     st.session_state.messages_es.append({"role": "assistant", "content": reply})
