@@ -1,13 +1,11 @@
 import os
 import json
 import streamlit as st
-from dotenv import load_dotenv
 from openai import OpenAI
 
 from tools import recommend_apps  # usa la misma herramienta que en inglés
 
-# Cargar API key (local con .env o en Streamlit Cloud con secrets)
-load_dotenv()
+# Cargar API key solo desde entorno o secrets de Streamlit
 api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
 if not api_key:
     st.error("OPENAI_API_KEY no está definido ni en .env ni en los secretos de Streamlit.")
@@ -162,6 +160,7 @@ if user_input:
 
             st.markdown(reply)
 
+Remove dotenv import for Streamlit Cloud
     # Guardar respuesta del asistente
     st.session_state.chat_display_es.append({"role": "assistant", "content": reply})
     st.session_state.messages_es.append({"role": "assistant", "content": reply})
