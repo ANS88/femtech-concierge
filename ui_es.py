@@ -73,7 +73,7 @@ TOOLS = [
 # ---- CONFIGURACIÓN DE LA PÁGINA ----
 st.set_page_config(page_title="Concierge Femtech (ES)", page_icon="✨")
 st.title("✨ Concierge Femtech — versión en español")
-st.caption("Prototipo de agente femtech — información general, no es consejo médico.")
+st.caption("Prototipo de agente femtech — información general, no es consejo médico. Creado por Adriana Sainz, Ph.D.")
 
 # Historial de conversación en sesión
 if "messages_es" not in st.session_state:
