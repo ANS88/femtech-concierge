@@ -1,0 +1,47 @@
+[
+    {
+      "name": "MenoTrack",
+      "goals": ["menopause_symptom_tracking"],
+      "platforms": ["iOS", "Android"],
+      "pricing": { "monthly": 0 },
+      "tags": ["menopause", "education", "no_weight_loss"],
+      "pros": [
+        "Simple hot flash and sleep logging",
+        "Evidence-based education focused on menopause"
+      ],
+      "cons": [
+        "No community or live coaching features"
+      ]
+    },
+    {
+      "name": "CalmCycle",
+      "goals": ["cycle_tracking", "mood_sleep"],
+      "platforms": ["iOS"],
+      "pricing": { "monthly": 5 },
+      "tags": ["cycle", "mood", "sleep"],
+      "pros": [
+        "Nice mood journaling interface",
+        "Gentle, non-judgmental reminders"
+      ],
+      "cons": [
+        "Only available on iOS",
+        "Paid if you want all features"
+      ]
+    },
+    {
+      "name": "LunaDiary",
+      "goals": ["menopause_symptom_tracking", "mood_sleep"],
+      "platforms": ["Android"],
+      "pricing": { "monthly": 3 },
+      "tags": ["menopause", "journal", "sleep"],
+      "pros": [
+        "Good for tracking mood and sleep during perimenopause",
+        "Lightweight journaling focus"
+      ],
+      "cons": [
+        "Android only",
+        "Smaller library of educational content"
+      ]
+    }
+  ]
+  
