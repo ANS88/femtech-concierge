@@ -3,10 +3,9 @@ import json
 import streamlit as st
 from openai import OpenAI
 
-from tools import recommend_apps  # usa la misma herramienta que en inglés
-
-# Cargar API key solo desde entorno o secrets de Streamlit
+from tools import recommend_apps
 api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
+
 if not api_key:
     st.error("OPENAI_API_KEY no está definido ni en .env ni en los secretos de Streamlit.")
     st.stop()
