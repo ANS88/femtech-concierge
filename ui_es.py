@@ -1,16 +1,17 @@
 import os
 import json
 import streamlit as st
-from openai import OpenAI
+import openai 
+from tools import recommend_apps  
 
 from tools import recommend_apps
 api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
 
-if not api_key:
-    st.error("OPENAI_API_KEY no está definido ni en .env ni en los secretos de Streamlit.")
+if "OPENAI_API_KEY" not in st.secrets:
+    st.error("No se encontró OPENAI_API_KEY en los secretos de Streamlit.")
     st.stop()
-
-client = OpenAI(api_key=api_key)
+    
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # ---- PROMPT DEL SISTEMA EN ESPAÑOL ----
 SYSTEM_PROMPT = """
