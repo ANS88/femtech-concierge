@@ -1,0 +1,6 @@
+streamlit
+openai
+python-dotenv
+
+
+Add openai to requirements
