@@ -89,12 +89,12 @@ def run_model_es(user_input: str) -> str:
     messages = st.session_state.messages_es + [{"role": "user", "content": user_input}]
 
     # Primera llamada: el modelo decide si quiere llamar a herramientas
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=messages,
-        tools=TOOLS,
-        tool_choice="auto"
-    )
+  response = openai.chat.completions.create(
+    model="gpt-4.1-mini",
+    messages=messages,
+    tools=TOOLS,
+    tool_choice="auto",
+)
 
     msg = response.choices[0].message
 
@@ -117,10 +117,12 @@ def run_model_es(user_input: str) -> str:
                 })
 
         # Segunda llamada: el modelo recibe la salida de la herramienta
-        followup = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=messages + [msg] + tool_messages
-        )
+       response = openai.chat.completions.create(
+    model="gpt-4.1-mini",
+    messages=messages,
+    tools=TOOLS,
+    tool_choice="auto",
+)
         final_msg = followup.choices[0].message
         return final_msg.content
 
