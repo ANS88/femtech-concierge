@@ -1,19 +1,19 @@
 import os
 import json
 import streamlit as st
-import openai 
-from tools import recommend_apps  
-
+import openai
 from tools import recommend_apps
+
+# ----------------- CONFIGURACIÓN DE LA API -----------------
 api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
 
-if "OPENAI_API_KEY" not in st.secrets:
-    st.error("No se encontró OPENAI_API_KEY en los secretos de Streamlit.")
+if not api_key:
+    st.error("No se encontró la variable OPENAI_API_KEY. Añádela en los secretos de Streamlit.")
     st.stop()
-    
-openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-# ---- PROMPT DEL SISTEMA EN ESPAÑOL ----
+openai.api_key = api_key
+
+# ----------------- PROMPT DEL SISTEMA -----------------
 SYSTEM_PROMPT = """
 Eres “Concierge Femtech”, una compañera cálida, informada y feminista
 para personas que navegan el ciclo menstrual, la perimenopausia y la menopausia.
@@ -41,7 +41,7 @@ Siempre incluye una frase tipo:
 Responde SIEMPRE en español, a menos que la persona pida explícitamente otro idioma.
 """.strip()
 
-# ---- DEFINICIÓN DE LA HERRAMIENTA ----
+# ----------------- DEFINICIÓN DE HERRAMIENTAS -----------------
 TOOLS = [
     {
         "type": "function",
@@ -70,30 +70,28 @@ TOOLS = [
     }
 ]
 
-# ---- CONFIGURACIÓN DE LA PÁGINA ----
+# ----------------- CONFIGURACIÓN DE LA PÁGINA -----------------
 st.set_page_config(page_title="Concierge Femtech (ES)", page_icon="✨")
 st.title("✨ Concierge Femtech — versión en español")
 st.caption("Prototipo de agente femtech — información general, no es consejo médico. Creado por Adriana Sainz, Ph.D.")
 
-# Historial de conversación en sesión
+# ----------------- ESTADO DE SESIÓN -----------------
 if "messages_es" not in st.session_state:
-    st.session_state.messages_es = [
-        {"role": "system", "content": SYSTEM_PROMPT}
-    ]
+    st.session_state.messages_es = [{"role": "system", "content": SYSTEM_PROMPT}]
 if "chat_display_es" not in st.session_state:
-    st.session_state.chat_display_es = []  # solo usuario/asistente para mostrar
+    st.session_state.chat_display_es = []
 
-
+# ----------------- FUNCIÓN PRINCIPAL -----------------
 def run_model_es(user_input: str) -> str:
     """Envía la conversación al modelo, maneja herramientas y devuelve respuesta en español."""
     messages = st.session_state.messages_es + [{"role": "user", "content": user_input}]
 
-    # Primera llamada: el modelo decide si quiere llamar a herramientas            
+    # Primera llamada: el modelo decide si quiere usar herramientas
     response = openai.chat.completions.create(
-       model="gpt-4.1-mini",
-       messages=messages,
-       tools=TOOLS,
-       tool_choice="auto",
+        model="gpt-4.1-mini",
+        messages=messages,
+        tools=TOOLS,
+        tool_choice="auto",
     )
 
     msg = response.choices[0].message
@@ -113,39 +111,31 @@ def run_model_es(user_input: str) -> str:
                     "role": "tool",
                     "tool_call_id": tool_call.id,
                     "name": "recommend_apps",
-                    "content": json.dumps(apps, ensure_ascii=False)
+                    "content": json.dumps(apps, ensure_ascii=False),
                 })
 
-    # Segunda llamada: el modelo recibe la salida de la herramienta
-        response = openai.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=messages,
-        tools=TOOLS,
-        tool_choice="auto",
-    )
+        # Segunda llamada: el modelo recibe la salida de la herramienta
+        followup = openai.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=messages + [msg] + tool_messages,
+        )
         final_msg = followup.choices[0].message
         return final_msg.content
 
     # Sin herramientas → respuesta directa
     return msg.content
 
-
-# ---- INTERFAZ DE CHAT ----
-
+# ----------------- INTERFAZ DE CHAT -----------------
 # Mostrar historial
 for m in st.session_state.chat_display_es:
-    if m["role"] == "user":
-        with st.chat_message("user"):
-            st.markdown(m["content"])
-    elif m["role"] == "assistant":
-        with st.chat_message("assistant"):
-            st.markdown(m["content"])
+    with st.chat_message(m["role"]):
+        st.markdown(m["content"])
 
-# Cuadro de entrada abajo
+# Cuadro de entrada
 user_input = st.chat_input("Haz una pregunta sobre síntomas, apps o cómo prepararte para tu cita médica...")
 
 if user_input:
-    # Guardar mensaje de usuario
+    # Guardar mensaje del usuario
     st.session_state.chat_display_es.append({"role": "user", "content": user_input})
     st.session_state.messages_es.append({"role": "user", "content": user_input})
 
@@ -161,6 +151,7 @@ if user_input:
                 st.error(str(e))
 
             st.markdown(reply)
+
     # Guardar respuesta del asistente
     st.session_state.chat_display_es.append({"role": "assistant", "content": reply})
     st.session_state.messages_es.append({"role": "assistant", "content": reply})
